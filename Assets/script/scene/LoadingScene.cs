@@ -27,6 +27,8 @@ namespace stealFight {
             }
             any_button.onClick.AddListener(delegate() {
                 hiding_mask.SetTrigger("exit");
+                // async.allowSceneActivation = true;
+
             });
         }
 
@@ -38,24 +40,25 @@ namespace stealFight {
         }
 
         IEnumerator LoadingNewScene(string scene_name) {
-            async = SceneManager.LoadSceneAsync(scene_name);
+            // async = SceneManager.LoadSceneAsync(scene_name);
+            async = Resources.LoadAsync("scene/game");
             async.allowSceneActivation = false;
             async.completed += delegate(AsyncOperation ao) {
                 hiding_mask.SetTrigger("enter");
+                Debug.Log("load complete");
             };
-
-            if (async.isDone) {
-                hiding_mask.SetTrigger("enter");
-            }
 
             while (!async.isDone) {
                 // Debug.Log("loaading ....................");
                 yield return null;
             }
+
         }
 
         public void OnLoadingSceneEnd() {
             Debug.Log("on loading scene end ");
+            // async.allowSceneActivation = false;
+            SceneManager.LoadSceneAsync("game");
         }
     }
 
